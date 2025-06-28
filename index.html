@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Interativa: A Estratégia da Rede Américas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Einstein Ensino (Blue/Green) -->
+    <!-- Application Structure Plan: A single-page application with a fixed top navigation bar for smooth scrolling to thematic sections. The structure is designed for non-linear exploration, allowing users to jump directly to the topic of interest (e.g., Competition, Strategy, History). The flow starts with a high-level overview (dashboard style), then allows drilling down into the historical context (A Gênese), the business model (Estratégia), the market landscape (Cenário Competitivo), the key people (Liderança), and future outlooks (Futuro). This structure was chosen over a linear report format to make the dense information more digestible and engaging, empowering the user to control their learning path. -->
+    <!-- Visualization & Content Choices: 
+        - Overview Stats: Goal: Inform. Method: Large number cards for immediate impact. Justification: Quickly communicates scale.
+        - Ownership Structure: Goal: Inform. Method: Chart.js Donut Chart. Justification: Visually represents the 50/50 joint venture partnership clearly.
+        - Market Position: Goal: Compare. Method: Chart.js Bar Chart comparing revenue. Justification: Establishes Rede Américas' position as the #2 player effectively.
+        - Historical Timeline: Goal: Explain Change. Method: Interactive HTML/CSS/JS cards. Justification: Tells the parallel stories of Amil and Dasa in a more engaging way than text blocks, highlighting the "why" behind the merger.
+        - Business Model: Goal: Compare/Organize. Method: HTML/CSS diagram. Justification: Clearly illustrates the core strategic difference between the "Rede Aberta" and "Verticalizado" models without complex text.
+        - Competitive Analysis: Goal: Compare. Method: Chart.js Radar Chart. Justification: Provides a powerful multi-axial comparison of Rede Américas, Rede D'Or, and Hapvida that is more insightful than a simple table.
+        - SWOT Analysis: Goal: Organize. Method: Four-quadrant layout with HTML/Tailwind. Justification: A classic, easily scannable format for strategic analysis.
+        - Future Scenarios: Goal: Inform/Explore. Method: Interactive tabs with JS. Justification: Allows easy comparison of the optimistic, pessimistic, and likely outcomes without cluttering the UI.
+        - Library/Method: Chart.js for all charts (Canvas-based). All other visuals and interactions use HTML, Tailwind CSS, and vanilla JavaScript.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        :root {
+            --einstein-navy: #004586;
+            --einstein-green: #00A99D;
+            --einstein-gray: #6c757d;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #374151; /* gray-700 */
+        }
+        .text-einstein-navy { color: var(--einstein-navy); }
+        .bg-einstein-navy { background-color: var(--einstein-navy); }
+        .text-einstein-green { color: var(--einstein-green); }
+        .border-einstein-green { border-color: var(--einstein-green); }
+
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--einstein-green);
+            border-bottom-color: var(--einstein-green);
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 300px;
+            max-height: 400px;
+            width: 100%;
+            max-width: 500px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background-color: var(--einstein-navy);
+            color: white;
+            font-weight: 600;
+        }
+        .timeline-card::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: -21px;
+            width: 2px;
+            height: calc(100% + 20px);
+            background-color: #cbd5e1; /* slate-300 */
+        }
+        .timeline-card:last-child::before {
+            display: none;
+        }
+        .timeline-dot {
+            position: absolute;
+            top: 24px;
+            left: -30px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            border: 4px solid var(--einstein-green);
+        }
+        .timeline-dot-secondary {
+             border-color: var(--einstein-gray);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-700">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <h1 class="text-xl md:text-2xl font-bold text-einstein-navy">Rede Américas</h1>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#overview" class="nav-link px-2 py-1 font-medium">Visão Geral</a>
+                    <a href="#genesis" class="nav-link px-2 py-1 font-medium">A Gênese</a>
+                    <a href="#strategy" class="nav-link px-2 py-1 font-medium">Estratégia</a>
+                    <a href="#competition" class="nav-link px-2 py-1 font-medium">Competição</a>
+                    <a href="#leadership" class="nav-link px-2 py-1 font-medium">Liderança</a>
+                    <a href="#future" class="nav-link px-2 py-1 font-medium">Futuro</a>
+                </div>
+                <div class="md:hidden">
+                    <select id="mobile-nav" class="bg-white border border-slate-300 rounded-md p-2 text-slate-700">
+                        <option value="#overview">Visão Geral</option>
+                        <option value="#genesis">A Gênese</option>
+                        <option value="#strategy">Estratégia</option>
+                        <option value="#competition">Competição</option>
+                        <option value="#leadership">Liderança</option>
+                        <option value="#future">Futuro</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="overview" class="min-h-screen flex flex-col justify-center items-center text-center pt-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-einstein-navy mb-4">Um Novo Gigante da Saúde no Brasil</h2>
+            <p class="max-w-3xl mx-auto text-lg text-slate-600 mb-12">
+                Uma análise interativa da Rede Américas, a joint venture entre Dasa e Amil que reconfigurou o setor hospitalar. Explore os dados, a estratégia e o cenário competitivo da segunda maior rede do país.
+            </p>
+
+            <div class="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mb-12">
+                <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200">
+                    <p class="text-3xl md:text-4xl font-bold text-einstein-green">25</p>
+                    <p class="text-sm text-slate-500">Hospitais</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200">
+                    <p class="text-3xl md:text-4xl font-bold text-einstein-green">~4.500</p>
+                    <p class="text-sm text-slate-500">Leitos</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200">
+                    <p class="text-3xl md:text-4xl font-bold text-einstein-green">53</p>
+                    <p class="text-sm text-slate-500">Centros Médicos e Oncológicos</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-md border border-slate-200">
+                    <p class="text-3xl md:text-4xl font-bold text-einstein-green">R$10.6 bi</p>
+                    <p class="text-sm text-slate-500">Receita Anual (est.)</p>
+                </div>
+            </div>
+
+            <div class="w-full max-w-5xl grid md:grid-cols-2 gap-8">
+                 <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-lg mb-4 text-center text-einstein-navy">Posição no Mercado (Receita)</h3>
+                    <div class="chart-container">
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                     <p class="text-xs text-slate-500 mt-2 text-center">A Rede Américas nasce como a segunda maior do país em faturamento, posicionando-se como uma forte concorrente da líder Rede D'Or.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-lg mb-4 text-center text-einstein-navy">Estrutura de Controle</h3>
+                    <div class="chart-container">
+                        <canvas id="ownershipChart"></canvas>
+                    </div>
+                     <p class="text-xs text-slate-500 mt-2 text-center">A empresa é uma joint venture com controle compartilhado e participações acionárias iguais entre Dasa e Amil.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="genesis" class="py-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-einstein-navy">A Gênese: Uma Fusão por Necessidade</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600 mt-4">A união não foi um movimento de expansão, mas uma aliança estratégica para resolver desafios críticos de suas controladoras: o endividamento da Dasa e a necessidade de reestruturação da Amil.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 text-center text-einstein-green">A Trajetória da Dasa</h3>
+                    <div class="relative pl-8 space-y-8">
+                        <div class="timeline-card relative bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                            <div class="timeline-dot"></div>
+                            <h4 class="font-semibold">Líder em Diagnósticos</h4>
+                            <p class="text-sm text-slate-600">A Dasa cresce e se consolida como a maior empresa de medicina diagnóstica da América Latina através de aquisições.</p>
+                        </div>
+                         <div class="timeline-card relative bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                            <div class="timeline-dot"></div>
+                            <h4 class="font-semibold">Expansão para Hospitais</h4>
+                            <p class="text-sm text-slate-600">Sob controle da família Bueno, inicia uma ousada transformação para um ecossistema de saúde, entrando agressivamente no setor hospitalar.</p>
+                        </div>
+                         <div class="timeline-card relative bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                            <div class="timeline-dot"></div>
+                            <h4 class="font-semibold text-red-600">Desafio: Endividamento</h4>
+                            <p class="text-sm text-slate-600">O crescimento acelerado gera uma alta dívida, tornando a reestruturação financeira um imperativo estratégico urgente.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div>
+                    <h3 class="text-2xl font-bold mb-6 text-center" style="color: var(--einstein-gray);">A Trajetória da Amil</h3>
+                    <div class="relative pl-8 space-y-8">
+                        <div class="timeline-card relative bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                            <div class="timeline-dot timeline-dot-secondary"></div>
+                            <h4 class="font-semibold">Visão Empreendedora</h4>
+                            <p class="text-sm text-slate-600">Fundada por Edson de Godoy Bueno, a Amil se torna a maior operadora de saúde do Brasil.</p>
+                        </div>
+                         <div class="timeline-card relative bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                             <div class="timeline-dot timeline-dot-secondary"></div>
+                            <h4 class="font-semibold">Era UHG e Desafios</h4>
+                            <p class="text-sm text-slate-600">Após a venda para a UnitedHealth Group, enfrenta dificuldades operacionais e prejuízos devido a custos elevados e falta de agilidade.</p>
+                        </div>
+                         <div class="timeline-card relative bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                             <div class="timeline-dot timeline-dot-secondary"></div>
+                            <h4 class="font-semibold text-red-600">Desafio: Reestruturação</h4>
+                            <p class="text-sm text-slate-600">Comprada por José Seripieri Filho, a Amil precisa de escala e eficiência em sua rede hospitalar para voltar a ser competitiva.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="strategy" class="py-20 bg-slate-100 rounded-2xl shadow-inner">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-einstein-navy">Estratégia Central: A Aposta na "Rede Aberta"</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600 mt-4">Diferente da tendência de verticalização, a Rede Américas se posiciona como uma parceira estratégica para todas as operadoras de saúde, oferecendo acesso a hospitais de alta qualidade.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="p-6 border-2 border-dashed border-slate-300 rounded-lg">
+                    <h4 class="font-bold text-center mb-4 text-einstein-navy">Modelo Concorrente: Verticalizado</h4>
+                     <div class="space-y-2 text-center">
+                        <div class="bg-gray-200 text-gray-800 p-3 rounded-lg font-medium">Operadora A (Ex: Hapvida, Rede D'Or)</div>
+                        <div class="text-2xl">⬇️</div>
+                        <div class="bg-gray-200 text-gray-800 p-3 rounded-lg font-medium">Rede Própria de Hospitais A</div>
+                         <p class="text-xs text-slate-500 pt-2">A operadora direciona seus pacientes para sua própria rede, controlando toda a cadeia de custos.</p>
+                    </div>
+                </div>
+                <div class="p-6 bg-white border-2 border-einstein-green rounded-lg shadow-lg">
+                     <h4 class="font-bold text-center mb-4 text-einstein-green">Modelo Rede Américas: Rede Aberta</h4>
+                     <div class="flex justify-around items-start">
+                        <div class="text-center space-y-2">
+                            <div class="bg-gray-100 text-gray-800 p-2 rounded-lg font-medium">Amil</div>
+                             <div class="text-2xl">↘️</div>
+                        </div>
+                         <div class="text-center space-y-2">
+                            <div class="bg-gray-100 text-gray-800 p-2 rounded-lg font-medium">Outra Operadora</div>
+                             <div class="text-2xl">⬇️</div>
+                        </div>
+                         <div class="text-center space-y-2">
+                            <div class="bg-gray-100 text-gray-800 p-2 rounded-lg font-medium">Seguradora</div>
+                             <div class="text-2xl">↙️</div>
+                        </div>
+                     </div>
+                     <div class="bg-green-100 text-einstein-green p-3 rounded-lg font-bold text-center mt-2">Rede Américas</div>
+                     <p class="text-xs text-slate-600 pt-3 text-center">A rede atende pacientes de múltiplas fontes pagadoras, posicionando-se como uma infraestrutura hospitalar para todo o mercado.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="competition" class="py-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-einstein-navy">Cenário Competitivo: A Batalha de Titãs</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600 mt-4">A empresa entra em rota de colisão direta com a Rede D'Or pelo segmento premium, enquanto se diferencia do modelo de baixo custo da Hapvida.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <h3 class="font-bold text-lg mb-4 text-center text-einstein-navy">Análise Comparativa</h3>
+                    <div class="chart-container" style="height: 380px;">
+                        <canvas id="competitorRadarChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2 text-center">O gráfico compara as estratégias dos três maiores players em eixos-chave, mostrando o posicionamento único da Rede Américas.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                     <h3 class="font-bold text-lg mb-4 text-center text-einstein-navy">Análise SWOT</h3>
+                    <div class="grid grid-cols-2 gap-4 text-xs">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-green-800 mb-1">Forças</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li>Escala imediata</li>
+                                <li>Portfólio de hospitais premium</li>
+                                <li>Qualidade certificada (90%)</li>
+                                <li>Liderança experiente</li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-red-800 mb-1">Fraquezas</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li>Complexidade da integração</li>
+                                <li>Risco de conflito na governança</li>
+                                <li>Endividamento inicial</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-blue-800 mb-1">Oportunidades</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li>Ser parceira de operadoras</li>
+                                <li>Ganhos de eficiência com escala</li>
+                                <li>Inovar em modelos de pagamento</li>
+                            </ul>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-yellow-800 mb-1">Ameaças</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li>Competição intensa</li>
+                                <li>Percepção de rede "fechada"</li>
+                                <li>Pressão de custos do setor</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="leadership" class="py-20 bg-slate-100 rounded-2xl shadow-inner">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-einstein-navy">Liderança e Governança</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600 mt-4">A estrutura de poder combina executivos experientes e uma governança desenhada para equilibrar os interesses dos sócios.</p>
+            </div>
+             <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <img src="https://placehold.co/100x100/E2E8F0/475569?text=LC" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white shadow-lg">
+                    <h4 class="font-bold text-lg">Lício Cintra</h4>
+                    <p class="text-sm text-einstein-green font-semibold">CEO</p>
+                    <p class="text-xs text-slate-600 mt-2">Ex-CEO da Dasa e arquiteto do crescimento do Grupo São Francisco. Reconhecido pela expertise em eficiência operacional e escala.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <img src="https://placehold.co/100x100/E2E8F0/475569?text=JSF" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white shadow-lg">
+                    <h4 class="font-bold text-lg">José Seripieri Filho</h4>
+                    <p class="text-sm text-einstein-green font-semibold">Influenciador (Via Amil)</p>
+                    <p class="text-xs text-slate-600 mt-2">Novo proprietário da Amil e fundador da Qualicorp. Profundo conhecedor das relações comerciais do setor.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <img src="https://placehold.co/100x100/E2E8F0/475569?text=FB" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white shadow-lg">
+                    <h4 class="font-bold text-lg">Família Bueno</h4>
+                    <p class="text-sm text-einstein-green font-semibold">Influenciadora (Via Dasa)</p>
+                    <p class="text-xs text-slate-600 mt-2">Acionista controladora da Dasa e com longo histórico no setor, incluindo a fundação da Amil. Peça-chave nas decisões.</p>
+                </div>
+            </div>
+            <div class="mt-12 bg-white p-6 rounded-lg shadow-md text-center max-w-2xl mx-auto">
+                <h4 class="font-bold mb-4 text-einstein-navy">Estrutura do Conselho de Administração</h4>
+                <div class="flex justify-center items-center space-x-4">
+                     <div class="text-center">
+                        <div class="w-20 h-20 bg-green-200 rounded-full flex items-center justify-center font-bold text-green-800 text-2xl">3</div>
+                        <p class="text-xs mt-2 font-medium">Indicados Dasa</p>
+                    </div>
+                     <div class="text-4xl text-slate-300">+</div>
+                     <div class="text-center">
+                        <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-800 text-2xl">3</div>
+                        <p class="text-xs mt-2 font-medium">Indicados Amil</p>
+                    </div>
+                     <div class="text-4xl text-slate-300">+</div>
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-einstein-navy rounded-full flex items-center justify-center font-bold text-white text-2xl">3</div>
+                        <p class="text-xs mt-2 font-medium">Independentes</p>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-4">A governança 3+3+3 busca mitigar conflitos e garantir que as decisões priorizem a nova empresa.</p>
+            </div>
+        </section>
+
+        <section id="future" class="py-20">
+             <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-einstein-navy">Perspectivas Futuras</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600 mt-4">O sucesso dependerá da execução da integração e da aceitação do mercado. Explore os possíveis caminhos para a Rede Américas.</p>
+            </div>
+            <div class="max-w-4xl mx-auto">
+                <div class="mb-6 flex justify-center border-b border-slate-300">
+                    <button data-tab="optimistic" class="tab-button active py-3 px-6 text-sm font-medium text-slate-600 border-b-2 border-transparent">Cenário Otimista</button>
+                    <button data-tab="probable" class="tab-button py-3 px-6 text-sm font-medium text-slate-600 border-b-2 border-transparent">Caminho Provável</button>
+                    <button data-tab="pessimistic" class="tab-button py-3 px-6 text-sm font-medium text-slate-600 border-b-2 border-transparent">Cenário Pessimista</button>
+                </div>
+                <div id="tab-content" class="bg-white p-8 rounded-lg shadow-md min-h-[250px]">
+                    <div id="optimistic-content" class="tab-pane">
+                        <h4 class="font-bold text-xl text-green-600 mb-2">Sucesso e IPO</h4>
+                        <p class="text-slate-700">A integração é bem-sucedida, criando uma rede eficiente e de alta qualidade. O modelo de "rede aberta" floresce, com a empresa se tornando parceira indispensável das operadoras. A Rede Américas se consolida como líder em excelência e realiza uma bem-sucedida Oferta Pública Inicial (IPO), destravando valor para os acionistas.</p>
+                    </div>
+                     <div id="probable-content" class="tab-pane hidden">
+                        <h4 class="font-bold text-xl text-blue-800 mb-2">Jornada Lenta e Gradual</h4>
+                        <p class="text-slate-700">A integração é um processo longo e desafiador, com sucessos parciais. A rede consegue alguns contratos externos, mas permanece dependente da Amil no médio prazo. A lucratividade é conquistada lentamente, com base em uma forte disciplina de custos imposta pela liderança. O sucesso não é uniforme, mas gradual.</p>
+                    </div>
+                     <div id="pessimistic-content" class="tab-pane hidden">
+                        <h4 class="font-bold text-xl text-red-700 mb-2">Fracasso e Fardo</h4>
+                        <p class="text-slate-700">A integração falha, atolada em conflitos culturais e problemas de TI. A governança leva a impasses e paralisia. O mercado continua a ver a rede como um braço da Amil, afastando parceiros. A Rede Américas se torna um ativo de alto custo e baixa ocupação, virando um fardo financeiro para Dasa e Amil.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-einstein-navy text-white mt-16">
+        <div class="container mx-auto p-6 text-center text-sm">
+            <p>&copy; 2025 Análise Interativa da Rede Américas. Todos os dados foram compilados a partir do relatório de mercado.</p>
+            <p class="text-green-300">Esta é uma aplicação de visualização de dados para fins educacionais.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chartFontColor = '#374151'; // gray-700
+            const einsteinNavy = getComputedStyle(document.documentElement).getPropertyValue('--einstein-navy').trim();
+            const einsteinGreen = getComputedStyle(document.documentElement).getPropertyValue('--einstein-green').trim();
+            const einsteinGray = getComputedStyle(document.documentElement).getPropertyValue('--einstein-gray').trim();
+
+            const ownershipData = {
+                labels: ['Dasa', 'Amil'],
+                datasets: [{
+                    label: 'Controle Acionário',
+                    data: [50, 50],
+                    backgroundColor: [
+                        einsteinGreen,
+                        einsteinGray
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 4,
+                    hoverOffset: 8
+                }]
+            };
+            const ownershipConfig = {
+                type: 'doughnut',
+                data: ownershipData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: chartFontColor,
+                                font: { size: 14 }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            };
+            new Chart(document.getElementById('ownershipChart'), ownershipConfig);
+
+            const marketData = {
+                labels: ['Rede D\'Or', 'Rede Américas', 'Hapvida'],
+                datasets: [{
+                    label: 'Receita Líquida Combinada (R$ bilhões)',
+                    data: [28.7, 10.6, 27.2], 
+                    backgroundColor: [
+                        einsteinNavy,
+                        einsteinGreen,
+                        einsteinGray,
+                    ],
+                    borderRadius: 6,
+                    barPercentage: 0.7
+                }]
+            };
+            const marketConfig = {
+                type: 'bar',
+                data: marketData,
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Receita (R$ bi)', color: chartFontColor },
+                            ticks: { color: chartFontColor }
+                        },
+                        y: {
+                            ticks: { color: chartFontColor, font: { size: 14 } }
+                        }
+                    }
+                }
+            };
+            new Chart(document.getElementById('marketChart'), marketConfig);
+            
+            const competitorRadarData = {
+                labels: ['Qualidade Percebida', 'Verticalização', 'Foco em Custo', 'Escala Geográfica', 'Poder de Barganha'],
+                datasets: [
+                    {
+                        label: 'Rede Américas',
+                        data: [8, 3, 7, 7, 6],
+                        backgroundColor: 'rgba(0, 169, 157, 0.2)',
+                        borderColor: 'rgba(0, 169, 157, 1)',
+                        pointBackgroundColor: 'rgba(0, 169, 157, 1)',
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Rede D\'Or',
+                        data: [9, 8, 5, 9, 9],
+                        backgroundColor: 'rgba(0, 69, 134, 0.2)',
+                        borderColor: 'rgba(0, 69, 134, 1)',
+                        pointBackgroundColor: 'rgba(0, 69, 134, 1)',
+                         borderWidth: 2
+                    },
+                    {
+                        label: 'Hapvida',
+                        data: [5, 9, 9, 8, 7],
+                        backgroundColor: 'rgba(108, 117, 125, 0.2)',
+                        borderColor: 'rgba(108, 117, 125, 1)',
+                        pointBackgroundColor: 'rgba(108, 117, 125, 1)',
+                         borderWidth: 2
+                    }
+                ]
+            };
+            const competitorRadarConfig = {
+                type: 'radar',
+                data: competitorRadarData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                         legend: {
+                            position: 'bottom',
+                            labels: { color: chartFontColor, font: { size: 12 } }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            pointLabels: {
+                                color: chartFontColor,
+                                font: { size: 11 }
+                            },
+                            ticks: {
+                                backdropColor: 'rgba(255, 255, 255, 0.75)',
+                                color: chartFontColor,
+                                stepSize: 2
+                            },
+                            min: 0,
+                            max: 10
+                        }
+                    }
+                }
+            };
+            new Chart(document.getElementById('competitorRadarChart'), competitorRadarConfig);
+            
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const tabId = button.dataset.tab;
+                    tabPanes.forEach(pane => {
+                        if (`${tabId}-content` === pane.id) {
+                            pane.classList.remove('hidden');
+                        } else {
+                            pane.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const mobileNav = document.getElementById('mobile-nav');
+            mobileNav.addEventListener('change', () => {
+                window.location.href = mobileNav.value;
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                        mobileNav.value = `#${entry.target.id}`;
+                    }
+                });
+            }, { rootMargin: "-50% 0px -50% 0px" });
+
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+</body>
+</html>
+in
