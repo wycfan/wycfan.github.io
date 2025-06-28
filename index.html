@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Chosen Palette: Einstein Ensino (Blue/Green) -->
-    <!-- Application Structure Plan: A single-page application with a fixed top navigation bar for smooth scrolling to thematic sections. The structure is designed for non-linear exploration, allowing users to jump directly to the topic of interest (e.g., Competition, Strategy, History). The flow starts with a high-level overview (dashboard style), then allows drilling down into the historical context (A Gênese), the business model (Estratégia), the market landscape (Cenário Competitivo), the key people (Liderança), and future outlooks (Futuro). This structure was chosen over a linear report format to make the dense information more digestible and engaging, empowering the user to control their learning path. -->
+    <!-- Application Structure Plan: A single-page application with a fixed top navigation bar for smooth scrolling to thematic sections. The structure is designed for non-linear exploration, allowing users to jump directly to the topic of interest (e.g., Competition, Strategy, History). The flow starts with a high-level overview (dashboard style), then allows drilling down into the historical context (A Gênese), the business model (Estratégia), the market landscape (Cenário Competitivo), the key people (Liderança), future outlooks (Futuro), and finally the sources (Fontes). This structure was chosen over a linear report format to make the dense information more digestible and engaging, empowering the user to control their learning path. -->
     <!-- Visualization & Content Choices: 
         - Overview Stats: Goal: Inform. Method: Large number cards for immediate impact. Justification: Quickly communicates scale.
         - Ownership Structure: Goal: Inform. Method: Chart.js Donut Chart. Justification: Visually represents the 50/50 joint venture partnership clearly.
@@ -21,6 +21,7 @@
         - Competitive Analysis: Goal: Compare. Method: Chart.js Radar Chart. Justification: Provides a powerful multi-axial comparison of Rede Américas, Rede D'Or, and Hapvida that is more insightful than a simple table.
         - SWOT Analysis: Goal: Organize. Method: Four-quadrant layout with HTML/Tailwind. Justification: A classic, easily scannable format for strategic analysis.
         - Future Scenarios: Goal: Inform/Explore. Method: Interactive tabs with JS. Justification: Allows easy comparison of the optimistic, pessimistic, and likely outcomes without cluttering the UI.
+        - Sources: Goal: Inform/Reference. Method: Grouped link cards. Justification: Provides transparency and allows for further research by the user.
         - Library/Method: Chart.js for all charts (Canvas-based). All other visuals and interactions use HTML, Tailwind CSS, and vanilla JavaScript.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
@@ -110,6 +111,7 @@
                     <a href="#competition" class="nav-link px-2 py-1 font-medium">Competição</a>
                     <a href="#leadership" class="nav-link px-2 py-1 font-medium">Liderança</a>
                     <a href="#future" class="nav-link px-2 py-1 font-medium">Futuro</a>
+                    <a href="#sources" class="nav-link px-2 py-1 font-medium">Fontes</a>
                 </div>
                 <div class="md:hidden">
                     <select id="mobile-nav" class="bg-white border border-slate-300 rounded-md p-2 text-slate-700">
@@ -119,6 +121,7 @@
                         <option value="#competition">Competição</option>
                         <option value="#leadership">Liderança</option>
                         <option value="#future">Futuro</option>
+                        <option value="#sources">Fontes</option>
                     </select>
                 </div>
             </div>
@@ -130,7 +133,7 @@
         <section id="overview" class="min-h-screen flex flex-col justify-center items-center text-center pt-16">
             <h2 class="text-4xl md:text-5xl font-bold text-einstein-navy mb-4">Um Novo Gigante da Saúde no Brasil</h2>
             <p class="max-w-3xl mx-auto text-lg text-slate-600 mb-12">
-                Uma análise interativa da Rede Américas, a joint venture entre Dasa e Amil que reconfigurou o setor hospitalar. Explore os dados, a estratégia e o cenário competitivo de uma das maiores redes do país.
+                Uma análise interativa da Rede Américas, a joint venture entre Dasa e Amil que reconfigurou o setor hospitalar. Explore os dados, a estratégia e o cenário competitivo de uma das maiores redes que nasce no país.
             </p>
 
             <div class="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mb-12">
@@ -158,7 +161,7 @@
                     <div class="chart-container">
                         <canvas id="marketChart"></canvas>
                     </div>
-                     <p class="text-xs text-slate-500 mt-2 text-center">A Rede Américas nasce como uma das maiores do país em faturamento, posicionando-se como uma forte concorrente da líder Rede D'Or.</p>
+                     <p class="text-xs text-slate-500 mt-2 text-center">A Rede Américas nasce como uma das maiores redes de saúde do país em faturamento, posicionando-se como uma forte concorrente da líder Rede D'Or.</p>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
                     <h3 class="font-bold text-lg mb-4 text-center text-einstein-navy">Estrutura de Controle</h3>
@@ -387,6 +390,152 @@
             </div>
         </section>
 
+        <section id="sources" class="py-20 bg-slate-100 rounded-2xl shadow-inner">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-einstein-navy">Fontes e Referências</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600 mt-4">A lista de publicações e relatórios utilizados como base para esta análise interativa.</p>
+            </div>
+            <div class="max-w-6xl mx-auto">
+                <h3 class="text-xl font-bold text-einstein-navy mb-6">Contexto da Transação e Estrutura</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Ímpar Serviços Hospitalares: EQI Research vê transação positiva</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: EuQueroInvestir</p>
+                        </div>
+                        <a href="https://euqueroinvestir.com/acoes/impar-servicos-hospitalares-eqi-research-ve-transacao-como-positiva" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">DASA (DASA3): Uma união promissora</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: XP Investimentos</p>
+                        </div>
+                        <a href="https://conteudos.xpi.com.br/acoes/relatorios/dasa-dasa3-uma-uniao-promissora/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Dasa confirma acordo de associação com a Amil para joint venture</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: CNN Brasil</p>
+                        </div>
+                        <a href="https://www.cnnbrasil.com.br/economia/negocios/dasa-confirma-acordo-de-associacao-com-a-amil-para-joint-venture-com-25-hospitais/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Amil e Dasa finalizam acordo para formar 2º maior grupo hospitalar</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Poder360</p>
+                        </div>
+                        <a href="https://www.poder360.com.br/poder-saude/amil-e-dasa-finalizam-acordo-para-formar-2o-maior-grupo-hospitalar/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Começa a operar a Rede Américas, segunda maior rede hospitalar do Brasil</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Jornal de Brasília</p>
+                        </div>
+                        <a href="https://jornaldebrasilia.com.br/blogs-e-colunas/analice-nicolau/comeca-a-operar-a-rede-americas-segunda-maior-rede-hospitalar-do-brasil-que-tem-mais-de-90-dos-seus-hospitais-acreditados/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Dasa (DASA3) e Amil dão passo final para criar gigante no setor de saúde</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Nord Investimentos</p>
+                        </div>
+                        <a href="https://www.nordinvestimentos.com.br/blog/dasa-amil-fusao/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-einstein-navy mb-6 mt-12">Histórico e Liderança</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Dasa anuncia Lício Cintra como próximo CEO</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Brazil Journal</p>
+                        </div>
+                        <a href="https://braziljournal.com/dasa-anuncia-licio-cintra-como-proximo-ceo-executivo-escalou-o-grupo-sao-francisco/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">UnitedHealth Agrees to Sell Brazilian Unit Amil</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: iPMI Global</p>
+                        </div>
+                        <a href="https://ipmiglobal.com/insights/unitedhealth-agrees-to-sell-brazilian-unit-amil" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Amil – Wikipédia, a enciclopédia livre</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Wikipédia</p>
+                        </div>
+                        <a href="https://pt.wikipedia.org/wiki/Amil" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">A trajetória de Edson Godoy Bueno: de engraxate a bilionário</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: ISTOÉ DINHEIRO</p>
+                        </div>
+                        <a href="https://istoedinheiro.com.br/trajetoria-de-edson-godoy-bueno-de-engraxate-bilionario" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Nossa História - Dasa</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Dasa</p>
+                        </div>
+                        <a href="https://www.dasa3.com.br/a-dasa/historico/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Lício Cintra assumirá o comando da Dasa</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Setor Saúde</p>
+                        </div>
+                        <a href="https://setorsaude.com.br/licio-cintra-assumira-o-comando-da-dasa/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-einstein-navy mb-6 mt-12">Cenário Competitivo e Tendências</h3>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Dasa e Amil: fusão pode trazer ganhos, mas depende de integração</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Futuro da Saúde</p>
+                        </div>
+                        <a href="https://futurodasaude.com.br/fusao-hospitais-dasa-e-amil/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Planos verticalizados crescem 104% em receita líquida</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Medicina S/A</p>
+                        </div>
+                        <a href="https://medicinasa.com.br/planos-verticalizacao/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Por que as operadoras de planos de saúde se verticalizam?</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: XVI Finance</p>
+                        </div>
+                        <a href="https://xvifinance.com.br/verticalizacao-ops/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">17 tendências para o mercado da saúde em 2025</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Souto Correa Advogados</p>
+                        </div>
+                        <a href="https://www.soutocorrea.com.br/artigos/17-tendencias-para-o-mercado-da-saude-em-2025/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                     <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Saúde suplementar: seis tendências que devem moldar nova era</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Futuro da Saúde</p>
+                        </div>
+                        <a href="https://futurodasaude.com.br/saude-suplementar-brd-libbs/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                     <div class="bg-white p-4 rounded-lg shadow-md border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">Quais os principais temas que devem entrar na pauta do mercado da saúde em 2025?</p>
+                            <p class="text-sm text-slate-500 mt-1">Fonte: Futuro da Saúde</p>
+                        </div>
+                        <a href="https://futurodasaude.com.br/mercado-da-saude-em-2025/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-einstein-green mt-4 inline-block hover:underline">Acessar Fonte →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="bg-einstein-navy text-white mt-16">
@@ -585,4 +734,3 @@
     </script>
 </body>
 </html>
-in
